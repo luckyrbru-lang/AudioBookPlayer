@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Иконка приложения: чёрный фон + тонкая белая пиковая масть по центру.
+     Работает как обычный (не-adaptive) значок на API 24+. Для более "нативного"
+     вида на API 26+ можно позже прогнать через Android Studio → New → Image Asset
+     и получить полноценную адаптивную иконку — это чисто визуальный апгрейд,
+     не влияет на работу приложения. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <path
+        android:fillColor="#000000"
+        android:pathData="M0,0h108v108h-108z" />
+
+    <!-- Пиковая масть (spade), простая минималистичная форма -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M54,26
+            C54,26 32,46 32,62
+            C32,73 41,80 50,78
+            C48,86 44,90 38,94
+            L70,94
+            C64,90 60,86 58,78
+            C67,80 76,73 76,62
+            C76,46 54,26 54,26 Z" />
+</vector>

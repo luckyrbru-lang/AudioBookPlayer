@@ -1,5 +1,6 @@
 package com.example.audiobookplayer.ui.library
 
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -36,6 +37,7 @@ class LibraryActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_library)
         scanner = LibraryScanner(this)

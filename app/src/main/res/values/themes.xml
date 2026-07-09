@@ -10,4 +10,11 @@
         <item name="android:statusBarColor">@color/bg_primary</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
     </style>
+
+    <!-- Экран загрузки: чёрный фон + белая пиковая масть по центру -->
+    <style name="Theme.AudioBookPlayer.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/bg_primary</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_splash_spade</item>
+        <item name="postSplashScreenTheme">@style/Theme.AudioBookPlayer</item>
+    </style>
 </resources>

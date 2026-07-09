@@ -98,7 +98,7 @@ class PlayerActivity : AppCompatActivity() {
             .setTitle("Скорость воспроизведения")
             .setItems(speeds) { _, which ->
                 viewModel.setSpeed(values[which])
-                findViewById<android.widget.TextView>(R.id.btnSpeed).text = speeds[which]
+                findViewById<android.widget.TextView>(R.id.btnSpeed).text = "♦ ${speeds[which]}"
             }.show()
     }
 

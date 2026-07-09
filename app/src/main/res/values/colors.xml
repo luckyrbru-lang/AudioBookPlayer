@@ -5,6 +5,7 @@
     <color name="bg_capsule">#2A2A2C</color>
     <color name="text_primary">#FFFFFF</color>
     <color name="text_secondary">#9A9A9E</color>
-    <color name="accent_yellow">#FFDB4D</color>
+    <color name="accent_yellow">#F2F2F2</color>
     <color name="progress_track">#3A3A3C</color>
+    <color name="suit_glyph">#FFFFFF</color>
 </resources>
