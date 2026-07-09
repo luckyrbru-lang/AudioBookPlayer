@@ -18,9 +18,11 @@ import java.util.concurrent.TimeUnit
 
 class PlayerActivity : AppCompatActivity() {
 
-    private val viewModel: PlayerViewModel by viewModels {
+    val viewModelFactory by lazy {
         ViewModelFactory(applicationContext, (application as AudioBookApp).repository)
     }
+
+    private val viewModel: PlayerViewModel by viewModels { viewModelFactory }
 
     private val progressHandler = Handler(Looper.getMainLooper())
     private val progressRunnable = object : Runnable {
@@ -39,6 +41,9 @@ class PlayerActivity : AppCompatActivity() {
         viewModel.loadBook(bookId)
 
         findViewById<android.widget.ImageButton>(R.id.btnBack).setOnClickListener { finish() }
+        findViewById<android.widget.ImageButton>(R.id.btnBookmarks).setOnClickListener {
+            BookmarksBottomSheet().show(supportFragmentManager, BookmarksBottomSheet.TAG)
+        }
 
         findViewById<android.widget.ImageButton>(R.id.btnPlayPause).setOnClickListener {
             viewModel.togglePlayPause()
@@ -59,7 +64,7 @@ class PlayerActivity : AppCompatActivity() {
         findViewById<android.widget.TextView>(R.id.btnSpeed).setOnClickListener { showSpeedDialog() }
         findViewById<android.widget.TextView>(R.id.btnSleepTimer).setOnClickListener { showSleepTimerDialog() }
         findViewById<android.widget.TextView>(R.id.btnAddBookmark).setOnClickListener {
-            viewModel.addBookmark()
+            showAddBookmarkDialog()
         }
 
         observeState()
@@ -89,6 +94,24 @@ class PlayerActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun showAddBookmarkDialog() {
+        val input = android.widget.EditText(this).apply {
+            hint = "Заметка (необязательно)"
+            setTextColor(getColor(R.color.text_primary))
+            setHintTextColor(getColor(R.color.text_secondary))
+        }
+        AlertDialog.Builder(this)
+            .setTitle("♠ Новая закладка")
+            .setView(input)
+            .setPositiveButton("Сохранить") { _, _ ->
+                val note = input.text.toString().trim().ifBlank { null }
+                viewModel.addBookmark(note)
+                android.widget.Toast.makeText(this, "Закладка добавлена", android.widget.Toast.LENGTH_SHORT).show()
+            }
+            .setNegativeButton("Отмена", null)
+            .show()
     }
 
     private fun showSpeedDialog() {

@@ -37,6 +37,8 @@ dependencies {
     implementation("androidx.recyclerview:recyclerview:1.3.2")
     implementation("androidx.documentfile:documentfile:1.0.1") // для сканирования папок (SAF)
     implementation("androidx.core:core-splashscreen:1.0.1")     // покерный экран загрузки
+    implementation("androidx.activity:activity-ktx:1.9.1")       // для viewModels() delegate
+    implementation("androidx.fragment:fragment-ktx:1.8.2")       // для activityViewModels() delegate
 
     // Media3 — актуальная замена устаревшего com.google.android.exoplayer.
     // media3-session даёт готовый MediaSession + автоматическое системное уведомление,

@@ -94,6 +94,18 @@ class PlayerViewModel(
         _positionMs.value = positionMs
     }
 
+    /** В отличие от seekTo(), умеет прыгать на другую главу — нужен для перехода по закладке,
+     *  которая может указывать не на текущий, а на любой другой файл книги. */
+    fun seekToBookmark(bookmark: Bookmark) {
+        controller?.seekTo(bookmark.chapterIndex, bookmark.positionMs)
+        _currentChapterIndex.value = bookmark.chapterIndex
+        _positionMs.value = bookmark.positionMs
+    }
+
+    fun deleteBookmark(bookmark: Bookmark) {
+        viewModelScope.launch { repository.deleteBookmark(bookmark) }
+    }
+
     fun skipForward(ms: Long = 30_000) = controller?.let { seekTo((it.currentPosition + ms).coerceAtMost(it.duration)) }
     fun skipBack(ms: Long = 15_000) = controller?.let { seekTo((it.currentPosition - ms).coerceAtLeast(0)) }
 
