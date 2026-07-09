@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="bg_primary">#121212</color>
+    <color name="bg_surface">#1C1C1E</color>
+    <color name="bg_capsule">#2A2A2C</color>
+    <color name="text_primary">#FFFFFF</color>
+    <color name="text_secondary">#9A9A9E</color>
+    <color name="accent_yellow">#FFDB4D</color>
+    <color name="progress_track">#3A3A3C</color>
+</resources>
