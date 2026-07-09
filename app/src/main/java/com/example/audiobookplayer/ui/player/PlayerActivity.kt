@@ -103,7 +103,7 @@ class PlayerActivity : AppCompatActivity() {
             setHintTextColor(getColor(R.color.text_secondary))
         }
         AlertDialog.Builder(this)
-            .setTitle("♠ Новая закладка")
+            .setTitle("♠\uFE0E Новая закладка")
             .setView(input)
             .setPositiveButton("Сохранить") { _, _ ->
                 val note = input.text.toString().trim().ifBlank { null }
@@ -121,7 +121,7 @@ class PlayerActivity : AppCompatActivity() {
             .setTitle("Скорость воспроизведения")
             .setItems(speeds) { _, which ->
                 viewModel.setSpeed(values[which])
-                findViewById<android.widget.TextView>(R.id.btnSpeed).text = "♦ ${speeds[which]}"
+                findViewById<android.widget.TextView>(R.id.btnSpeed).text = "♦\uFE0E ${speeds[which]}"
             }.show()
     }
 

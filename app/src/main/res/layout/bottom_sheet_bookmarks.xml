@@ -9,7 +9,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="♠ Закладки"
+        android:text="♠︎ Закладки"
         android:textColor="@color/text_primary"
         android:textSize="18sp"
         android:textStyle="bold"
@@ -19,7 +19,7 @@
         android:id="@+id/tvEmptyBookmarks"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Закладок пока нет. Добавьте первую кнопкой ♠ в плеере."
+        android:text="Закладок пока нет. Добавьте первую кнопкой ♠︎ в плеере."
         android:textColor="@color/text_secondary"
         android:textSize="14sp"
         android:gravity="center"
