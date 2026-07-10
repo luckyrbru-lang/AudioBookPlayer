@@ -92,6 +92,16 @@ class PlayerActivity : AppCompatActivity() {
                         findViewById<android.widget.TextView>(R.id.tvPosition).text = formatTime(p)
                     }
                 }
+                launch {
+                    viewModel.sleepSecondsLeft.collect { secondsLeft ->
+                        val label = findViewById<android.widget.TextView>(R.id.btnSleepTimer)
+                        label.text = if (secondsLeft > 0) {
+                            "♣\uFE0E ${formatMinutesSeconds(secondsLeft)}"
+                        } else {
+                            "♣\uFE0E Таймер сна"
+                        }
+                    }
+                }
             }
         }
     }
@@ -141,6 +151,13 @@ class PlayerActivity : AppCompatActivity() {
         val m = TimeUnit.SECONDS.toMinutes(totalSec) % 60
         val s = totalSec % 60
         return if (h > 0) String.format("%d:%02d:%02d", h, m, s) else String.format("%d:%02d", m, s)
+    }
+
+    /** Таймер сна хранит остаток именно в секундах (не в мс), поэтому отдельный форматтер. */
+    private fun formatMinutesSeconds(totalSec: Int): String {
+        val m = totalSec / 60
+        val s = totalSec % 60
+        return String.format("%d:%02d", m, s)
     }
 
     override fun onStart() {
