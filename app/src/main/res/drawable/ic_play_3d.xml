@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="72dp"
+    android:height="72dp"
+    android:viewportWidth="72"
+    android:viewportHeight="72">
+
+    <!-- Тень под badge для эффекта "парения" над фоном -->
+    <path android:pathData="M36,39m-28,0a28,28 0,1,1 56,0a28,28 0,1,1 -56,0"
+        android:fillColor="#000000"
+        android:fillAlpha="0.35" />
+
+    <!-- Основной объёмный шар (градиент даёт "клэй" эффект) -->
+    <path android:pathData="M36,36m-28,0a28,28 0,1,1 56,0a28,28 0,1,1 -56,0">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:type="linear"
+                android:startX="36" android:startY="8"
+                android:endX="36" android:endY="64"
+                android:startColor="#4A4A4D"
+                android:endColor="#141415" />
+        </aapt:attr>
+    </path>
+
+    <!-- Глянцевый блик сверху -->
+    <path android:pathData="M20,20 C24,14 48,14 52,20 C48,17 24,17 20,20 Z"
+        android:fillColor="#FFFFFF"
+        android:fillAlpha="0.18" />
+
+    <!-- Тень треугольника (объём символа) -->
+    <path android:pathData="M31,21 L47,37 L31,53 Z"
+        android:fillColor="#000000"
+        android:fillAlpha="0.3" />
+
+    <!-- Сам треугольник play, чуть смещён вправо от центра для оптического баланса -->
+    <path android:pathData="M30,20 L46,36 L30,52 Z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:type="linear"
+                android:startX="30" android:startY="20"
+                android:endX="46" android:endY="52"
+                android:startColor="#FFFFFF"
+                android:endColor="#D8D8DA" />
+        </aapt:attr>
+    </path>
+</vector>

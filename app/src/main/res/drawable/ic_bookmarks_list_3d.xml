@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="44dp"
+    android:height="44dp"
+    android:viewportWidth="44"
+    android:viewportHeight="44">
+
+    <path android:pathData="M22,24m-17,0a17,17 0,1,1 34,0a17,17 0,1,1 -34,0"
+        android:fillColor="#000000" android:fillAlpha="0.3" />
+
+    <path android:pathData="M22,22m-17,0a17,17 0,1,1 34,0a17,17 0,1,1 -34,0">
+        <aapt:attr name="android:fillColor">
+            <gradient android:type="linear" android:startX="22" android:startY="5" android:endX="22" android:endY="39"
+                android:startColor="#3E3E41" android:endColor="#131314" />
+        </aapt:attr>
+    </path>
+
+    <path android:pathData="M11,13 C13,9 31,9 33,13 C31,11 13,11 11,13 Z"
+        android:fillColor="#FFFFFF" android:fillAlpha="0.16" />
+
+    <!-- Иконка "закладка" (флажок), тень + объём -->
+    <path android:pathData="M17,13 h11 v18 l-5.5,-4 l-5.5,4 z"
+        android:fillColor="#000000" android:fillAlpha="0.3" />
+    <path android:pathData="M16,12 h11 v18 l-5.5,-4 l-5.5,4 z">
+        <aapt:attr name="android:fillColor">
+            <gradient android:type="linear" android:startX="16" android:startY="12" android:endX="27" android:endY="30"
+                android:startColor="#FFFFFF" android:endColor="#D8D8DA" />
+        </aapt:attr>
+    </path>
+</vector>

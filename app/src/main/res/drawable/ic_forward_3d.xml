@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="52dp"
+    android:height="52dp"
+    android:viewportWidth="52"
+    android:viewportHeight="52">
+
+    <path android:pathData="M26,29m-20,0a20,20 0,1,1 40,0a20,20 0,1,1 -40,0"
+        android:fillColor="#000000"
+        android:fillAlpha="0.3" />
+
+    <path android:pathData="M26,26m-20,0a20,20 0,1,1 40,0a20,20 0,1,1 -40,0">
+        <aapt:attr name="android:fillColor">
+            <gradient android:type="linear" android:startX="26" android:startY="6" android:endX="26" android:endY="46"
+                android:startColor="#3E3E41" android:endColor="#131314" />
+        </aapt:attr>
+    </path>
+
+    <path android:pathData="M13,16 C16,11 36,11 39,16 C36,13 16,13 13,16 Z"
+        android:fillColor="#FFFFFF" android:fillAlpha="0.16" />
+
+    <!-- Тени двойного шеврона вправо -->
+    <path android:pathData="M22,15 L33,26 L22,37"
+        android:strokeColor="#000000" android:strokeAlpha="0.3" android:strokeWidth="4.5"
+        android:strokeLineCap="round" android:strokeLineJoin="round" android:fillColor="#00000000" />
+    <path android:pathData="M15,15 L26,26 L15,37"
+        android:strokeColor="#000000" android:strokeAlpha="0.3" android:strokeWidth="4.5"
+        android:strokeLineCap="round" android:strokeLineJoin="round" android:fillColor="#00000000" />
+
+    <!-- Сам двойной шеврон вправо -->
+    <path android:pathData="M23,14 L34,26 L23,38"
+        android:strokeColor="#FFFFFF" android:strokeWidth="4.5" android:strokeLineCap="round"
+        android:strokeLineJoin="round" android:fillColor="#00000000" />
+    <path android:pathData="M16,14 L27,26 L16,38"
+        android:strokeColor="#FFFFFF" android:strokeWidth="4.5" android:strokeLineCap="round"
+        android:strokeLineJoin="round" android:fillColor="#00000000" />
+</vector>

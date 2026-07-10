@@ -76,7 +76,7 @@ class PlayerActivity : AppCompatActivity() {
                 launch {
                     viewModel.isPlaying.collect { playing ->
                         findViewById<android.widget.ImageButton>(R.id.btnPlayPause).setImageResource(
-                            if (playing) android.R.drawable.ic_media_pause else android.R.drawable.ic_media_play
+                            if (playing) R.drawable.ic_pause_3d else R.drawable.ic_play_3d
                         )
                     }
                 }
