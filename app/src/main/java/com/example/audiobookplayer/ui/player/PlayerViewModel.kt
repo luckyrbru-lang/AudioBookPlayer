@@ -13,6 +13,7 @@ import com.example.audiobookplayer.data.repository.BookRepository
 import com.example.audiobookplayer.player.PlaybackService
 import com.example.audiobookplayer.player.SleepTimer
 import com.google.common.util.concurrent.MoreExecutors
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -24,6 +25,10 @@ class PlayerViewModel(
 ) : ViewModel() {
 
     private var controller: MediaController? = null
+    // Позволяет дожидаться готовности controller вместо гонки с ?. — раньше setMediaItems()
+    // в loadBook() мог выполниться до того, как MediaController успевал подключиться,
+    // и молча ничего не делал (это и было причиной "звук не играет, кнопки не реагируют").
+    private val controllerReady = CompletableDeferred<MediaController>()
     private var bookId: Long = -1
     private var chapters = listOf<com.example.audiobookplayer.data.model.Chapter>()
 
@@ -52,8 +57,10 @@ class PlayerViewModel(
         val sessionToken = SessionToken(context, ComponentName(context, PlaybackService::class.java))
         val future = MediaController.Builder(context, sessionToken).buildAsync()
         future.addListener({
-            controller = future.get()
-            controller?.addListener(playerListener)
+            val c = future.get()
+            controller = c
+            c.addListener(playerListener)
+            controllerReady.complete(c)
         }, MoreExecutors.directExecutor())
     }
 
@@ -75,10 +82,10 @@ class PlayerViewModel(
             _durationMs.value = book.totalDurationMs
 
             val mediaItems = chapters.map { MediaItem.fromUri(it.fileUri) }
-            controller?.setMediaItems(mediaItems, book.lastChapterIndex, book.lastPositionMs)
-            controller?.prepare()
-            controller?.play()
-
+            val c = controllerReady.await() // ждём подключения, а не гадаем ?.
+            c.setMediaItems(mediaItems, book.lastChapterIndex, book.lastPositionMs)
+            c.prepare()
+            c.play()
         }
         viewModelScope.launch {
             repository.observeBookmarks(id).collect { _bookmarks.value = it }
