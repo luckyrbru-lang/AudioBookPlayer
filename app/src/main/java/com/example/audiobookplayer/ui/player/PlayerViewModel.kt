@@ -48,10 +48,18 @@ class PlayerViewModel(
     val bookmarks: StateFlow<List<Bookmark>> = _bookmarks.asStateFlow()
 
     private val sleepTimer = SleepTimer(
-        onTick = { },
-        onFinish = { withController { it.pause() } }
+        onTick = { secondsLeft -> applyFadeVolume(secondsLeft) },
+        onFinish = { withController { it.pause(); it.volume = 1f } } // сбрасываем громкость для следующего раза
     )
     val sleepSecondsLeft: StateFlow<Int> get() = sleepTimer.remainingSeconds
+
+    /** Последние FADE_SECONDS секунд таймера сна звук плавно затихает, а не обрывается резко. */
+    private fun applyFadeVolume(secondsLeft: Int) {
+        if (secondsLeft in 1..FADE_SECONDS) {
+            val volume = secondsLeft / FADE_SECONDS.toFloat()
+            withController { it.volume = volume }
+        }
+    }
 
     init {
         val sessionToken = SessionToken(context, ComponentName(context, PlaybackService::class.java))
@@ -132,9 +140,15 @@ class PlayerViewModel(
 
     fun setSpeed(speed: Float) = withController { it.setPlaybackSpeed(speed) }
 
-    fun startSleepTimer(minutes: Int) = sleepTimer.start(minutes)
+    fun startSleepTimer(minutes: Int) {
+        withController { it.volume = 1f } // на случай, если предыдущее затухание не успело сброситься
+        sleepTimer.start(minutes)
+    }
     fun extendSleepTimer(minutes: Int) = sleepTimer.extend(minutes)
-    fun cancelSleepTimer() = sleepTimer.stop()
+    fun cancelSleepTimer() {
+        withController { it.volume = 1f } // отмена посреди затухания не должна оставлять звук тихим
+        sleepTimer.stop()
+    }
 
     /** Обновляет прогресс раз в секунду — вызывается из Activity через свой таймер/handler. */
     fun tickProgress() {
@@ -157,5 +171,9 @@ class PlayerViewModel(
         controller?.release()
         sleepTimer.stop()
         super.onCleared()
+    }
+
+    companion object {
+        private const val FADE_SECONDS = 10
     }
 }
