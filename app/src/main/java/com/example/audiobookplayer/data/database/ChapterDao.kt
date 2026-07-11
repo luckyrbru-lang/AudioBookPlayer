@@ -12,4 +12,7 @@ interface ChapterDao {
 
     @Query("SELECT * FROM chapters WHERE bookId = :bookId ORDER BY orderIndex ASC")
     suspend fun getChaptersForBook(bookId: Long): List<Chapter>
+
+    @Query("DELETE FROM chapters WHERE bookId = :bookId")
+    suspend fun deleteChaptersForBook(bookId: Long)
 }

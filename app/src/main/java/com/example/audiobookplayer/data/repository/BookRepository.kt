@@ -26,7 +26,13 @@ class BookRepository(private val db: AppDatabase) {
         db.bookDao().updateProgress(bookId, chapterIndex, positionMs, percent)
     }
 
-    suspend fun deleteBook(book: Book) = db.bookDao().deleteBook(book)
+    /** Удаляет книгу вместе со всеми её главами и закладками — без этого в БД
+     *  оставался бы мусор (главы/закладки без книги, на которую они ссылались). */
+    suspend fun deleteBook(book: Book) {
+        db.chapterDao().deleteChaptersForBook(book.id)
+        db.bookmarkDao().deleteBookmarksForBook(book.id)
+        db.bookDao().deleteBook(book)
+    }
 
     fun observeBookmarks(bookId: Long): Flow<List<Bookmark>> = db.bookmarkDao().observeBookmarksForBook(bookId)
 

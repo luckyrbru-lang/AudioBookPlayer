@@ -17,4 +17,7 @@ interface BookmarkDao {
 
     @Query("SELECT * FROM bookmarks WHERE bookId = :bookId ORDER BY positionMs ASC")
     fun observeBookmarksForBook(bookId: Long): Flow<List<Bookmark>>
+
+    @Query("DELETE FROM bookmarks WHERE bookId = :bookId")
+    suspend fun deleteBookmarksForBook(bookId: Long)
 }

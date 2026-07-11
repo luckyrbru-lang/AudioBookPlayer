@@ -49,7 +49,7 @@ class PlayerViewModel(
 
     private val sleepTimer = SleepTimer(
         onTick = { },
-        onFinish = { controller?.pause() }
+        onFinish = { withController { it.pause() } }
     )
     val sleepSecondsLeft: StateFlow<Int> get() = sleepTimer.remainingSeconds
 
@@ -92,19 +92,24 @@ class PlayerViewModel(
         }
     }
 
-    fun togglePlayPause() {
-        controller?.let { if (it.isPlaying) it.pause() else it.play() }
+    /** Гарантирует, что действие выполнится ТОЛЬКО когда MediaController реально подключён —
+     *  без этого play/pause/seek/etc могли молча ничего не делать, если пользователь нажимал
+     *  кнопку быстро после открытия экрана (до завершения асинхронного подключения к сервису). */
+    private fun withController(action: (MediaController) -> Unit) {
+        viewModelScope.launch { action(controllerReady.await()) }
     }
 
-    fun seekTo(positionMs: Long) {
-        controller?.seekTo(positionMs)
+    fun togglePlayPause() = withController { if (it.isPlaying) it.pause() else it.play() }
+
+    fun seekTo(positionMs: Long) = withController {
+        it.seekTo(positionMs)
         _positionMs.value = positionMs
     }
 
     /** В отличие от seekTo(), умеет прыгать на другую главу — нужен для перехода по закладке,
      *  которая может указывать не на текущий, а на любой другой файл книги. */
-    fun seekToBookmark(bookmark: Bookmark) {
-        controller?.seekTo(bookmark.chapterIndex, bookmark.positionMs)
+    fun seekToBookmark(bookmark: Bookmark) = withController {
+        it.seekTo(bookmark.chapterIndex, bookmark.positionMs)
         _currentChapterIndex.value = bookmark.chapterIndex
         _positionMs.value = bookmark.positionMs
     }
@@ -113,12 +118,19 @@ class PlayerViewModel(
         viewModelScope.launch { repository.deleteBookmark(bookmark) }
     }
 
-    fun skipForward(ms: Long = 30_000) = controller?.let { seekTo((it.currentPosition + ms).coerceAtMost(it.duration)) }
-    fun skipBack(ms: Long = 15_000) = controller?.let { seekTo((it.currentPosition - ms).coerceAtLeast(0)) }
-
-    fun setSpeed(speed: Float) {
-        controller?.setPlaybackSpeed(speed)
+    fun skipForward(ms: Long = 30_000) = withController {
+        val target = (it.currentPosition + ms).coerceAtMost(it.duration.coerceAtLeast(0))
+        it.seekTo(target)
+        _positionMs.value = target
     }
+
+    fun skipBack(ms: Long = 15_000) = withController {
+        val target = (it.currentPosition - ms).coerceAtLeast(0)
+        it.seekTo(target)
+        _positionMs.value = target
+    }
+
+    fun setSpeed(speed: Float) = withController { it.setPlaybackSpeed(speed) }
 
     fun startSleepTimer(minutes: Int) = sleepTimer.start(minutes)
     fun extendSleepTimer(minutes: Int) = sleepTimer.extend(minutes)
@@ -133,8 +145,7 @@ class PlayerViewModel(
         }
     }
 
-    fun addBookmark(note: String? = null) {
-        val c = controller ?: return
+    fun addBookmark(note: String? = null) = withController { c ->
         viewModelScope.launch {
             repository.addBookmark(
                 Bookmark(bookId = bookId, chapterIndex = c.currentMediaItemIndex, positionMs = c.currentPosition, note = note)

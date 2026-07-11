@@ -44,7 +44,10 @@ class LibraryActivity : AppCompatActivity() {
 
         recyclerView = findViewById(R.id.recyclerBooks)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        adapter = BooksAdapter { book -> openPlayer(book) }
+        adapter = BooksAdapter(
+            onClick = { book -> openPlayer(book) },
+            onDelete = { book -> confirmDeleteBook(book) }
+        )
         recyclerView.adapter = adapter
 
         findViewById<android.view.View>(R.id.fabAdd).setOnClickListener { showAddMenu(it) }
@@ -96,6 +99,20 @@ class LibraryActivity : AppCompatActivity() {
                 ).show()
             }
         }
+    }
+
+    private fun confirmDeleteBook(book: Book) {
+        androidx.appcompat.app.AlertDialog.Builder(this)
+            .setTitle("Удалить книгу?")
+            .setMessage("«${book.title}» и все её закладки будут удалены безвозвратно. Сами аудиофайлы на телефоне не пострадают.")
+            .setPositiveButton("Удалить") { _, _ ->
+                lifecycleScope.launch {
+                    repository.deleteBook(book)
+                    android.widget.Toast.makeText(this@LibraryActivity, "Книга удалена", android.widget.Toast.LENGTH_SHORT).show()
+                }
+            }
+            .setNegativeButton("Отмена", null)
+            .show()
     }
 
     private fun openPlayer(book: Book) {
