@@ -107,6 +107,7 @@ class LibraryActivity : AppCompatActivity() {
             .setMessage("«${book.title}» и все её закладки будут удалены безвозвратно. Сами аудиофайлы на телефоне не пострадают.")
             .setPositiveButton("Удалить") { _, _ ->
                 lifecycleScope.launch {
+                    book.coverPath?.let { path -> java.io.File(path).delete() }
                     repository.deleteBook(book)
                     android.widget.Toast.makeText(this@LibraryActivity, "Книга удалена", android.widget.Toast.LENGTH_SHORT).show()
                 }

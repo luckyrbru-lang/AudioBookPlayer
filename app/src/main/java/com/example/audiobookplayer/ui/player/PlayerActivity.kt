@@ -102,6 +102,20 @@ class PlayerActivity : AppCompatActivity() {
                         }
                     }
                 }
+                launch {
+                    viewModel.book.collect { book ->
+                        if (book == null) return@collect
+                        findViewById<android.widget.TextView>(R.id.tvTitle).text = book.title
+                        findViewById<android.widget.TextView>(R.id.tvAuthor).text = book.author
+                        val coverView = findViewById<android.widget.ImageView>(R.id.coverImage)
+                        Glide.with(this@PlayerActivity)
+                            .load(book.coverPath) // null coverPath -> Glide просто покажет placeholder
+                            .placeholder(R.drawable.ic_cover_placeholder)
+                            .error(R.drawable.ic_cover_placeholder)
+                            .centerCrop()
+                            .into(coverView)
+                    }
+                }
             }
         }
     }

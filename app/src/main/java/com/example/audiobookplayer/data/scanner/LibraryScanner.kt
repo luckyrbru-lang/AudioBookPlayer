@@ -41,8 +41,9 @@ class LibraryScanner(private val context: Context) {
             }
             val chapters = uris.mapIndexed { index, uri -> readChapter(uri, index) }
             val totalDuration = chapters.sumOf { it.durationMs }
+            val coverPath = uris.firstOrNull()?.let { extractCover(it) }
             ScanResult(
-                book = Book(title = bookTitle, author = author, totalDurationMs = totalDuration),
+                book = Book(title = bookTitle, author = author, totalDurationMs = totalDuration, coverPath = coverPath),
                 chapters = chapters
             )
         }
@@ -76,16 +77,37 @@ class LibraryScanner(private val context: Context) {
             } finally {
                 retriever.release()
             }
+            val coverPath = extractCover(audioFiles.first().uri)
 
             ScanResult(
                 book = Book(
                     title = title, author = author,
                     totalDurationMs = totalDuration,
-                    sourceFolderUri = folderUri.toString()
+                    sourceFolderUri = folderUri.toString(),
+                    coverPath = coverPath
                 ),
                 chapters = chapters
             )
         }
+
+    /** Достаёт обложку из ID3-тегов (METADATA_KEY, встроенная картинка альбома) и
+     *  сохраняет её в приватное хранилище приложения. Возвращает null, если у файла
+     *  нет встроенной обложки — тогда в UI покажется наш собственный плейсхолдер. */
+    private fun extractCover(uri: Uri): String? {
+        val retriever = MediaMetadataRetriever()
+        return try {
+            retriever.setDataSource(context, uri)
+            val bytes = retriever.embeddedPicture ?: return null
+            val coversDir = java.io.File(context.filesDir, "covers").apply { mkdirs() }
+            val file = java.io.File(coversDir, "${java.util.UUID.randomUUID()}.jpg")
+            file.writeBytes(bytes)
+            file.absolutePath
+        } catch (_: Exception) {
+            null
+        } finally {
+            retriever.release()
+        }
+    }
 
     private fun readChapter(uri: Uri, index: Int, fallbackName: String? = null): Chapter {
         val retriever = MediaMetadataRetriever()

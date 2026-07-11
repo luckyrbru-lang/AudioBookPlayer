@@ -47,6 +47,9 @@ class PlayerViewModel(
     private val _bookmarks = MutableStateFlow<List<Bookmark>>(emptyList())
     val bookmarks: StateFlow<List<Bookmark>> = _bookmarks.asStateFlow()
 
+    private val _book = MutableStateFlow<com.example.audiobookplayer.data.model.Book?>(null)
+    val book: StateFlow<com.example.audiobookplayer.data.model.Book?> = _book.asStateFlow()
+
     private val sleepTimer = SleepTimer(
         onTick = { secondsLeft -> applyFadeVolume(secondsLeft) },
         onFinish = { withController { it.pause(); it.volume = 1f } } // сбрасываем громкость для следующего раза
@@ -86,6 +89,7 @@ class PlayerViewModel(
         bookId = id
         viewModelScope.launch {
             val book = repository.getBookById(id) ?: return@launch
+            _book.value = book
             chapters = repository.getChapters(id)
             _durationMs.value = book.totalDurationMs
 

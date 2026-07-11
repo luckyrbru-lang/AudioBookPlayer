@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Плейсхолдер обложки, когда в тегах MP3 нет встроенной картинки:
+     тёмный градиентный фон + крупная полупрозрачная пиковая масть по центру,
+     в духе "рубашки игральной карты". -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="200dp"
+    android:height="200dp"
+    android:viewportWidth="200"
+    android:viewportHeight="200">
+
+    <path android:pathData="M0,0h200v200h-200z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:type="linear"
+                android:startX="0" android:startY="0"
+                android:endX="200" android:endY="200"
+                android:startColor="#2A2A2C"
+                android:endColor="#141415" />
+        </aapt:attr>
+    </path>
+
+    <!-- Тонкая рамка "рубашки карты" -->
+    <path android:pathData="M14,14h172v172h-172z"
+        android:strokeColor="#FFFFFF" android:strokeAlpha="0.08" android:strokeWidth="2"
+        android:fillColor="#00000000" />
+
+    <!-- Крупная пиковая масть, полупрозрачная -->
+    <path android:fillColor="#FFFFFF" android:fillAlpha="0.14"
+        android:pathData="M100,58
+            C100,58 62,96 62,124
+            C62,142 76,152 90,149
+            C87,161 80,167 70,173
+            L130,173
+            C120,167 113,161 110,149
+            C124,152 138,142 138,124
+            C138,96 100,58 100,58 Z" />
+</vector>
